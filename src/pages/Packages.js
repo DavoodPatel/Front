@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
+const API_BASE = process.env.REACT_APP_BASE_API;
+
 const Packages = () => {
   const [packages, setPackages] = useState([]);
   const [selectedPackage, setSelectedPackage] = useState(null);
@@ -15,7 +17,7 @@ const Packages = () => {
   const location = useLocation();
 
   useEffect(() => {
-    axios.get('http://3.226.219.194:5000/api/packages')
+    axios.get(`${API_BASE}/api/packages`)
       .then((res) => setPackages(res.data))
       .catch(() => alert('Failed to fetch packages'));
 
@@ -36,7 +38,7 @@ const Packages = () => {
 
   const sendSMSNotification = async (phone) => {
     try {
-      const res = await axios.post('http://3.226.219.194:5000/api/send-sms', { phone });
+      const res = await axios.post(`${API_BASE}/api/send-sms`, { phone });
       console.log('📩 SMS sent:', res.data.message);
     } catch (err) {
       console.error('❌ Failed to send SMS:', err);
@@ -58,7 +60,7 @@ const Packages = () => {
         payment_mode,
       };
 
-      const res = await axios.post('http://3.226.219.194:5000/api/patient/save-package', payload);
+      const res = await axios.post(`${API_BASE}/api/patient/save-package`, payload);
 
       if (res.status === 200 || res.status === 201) {
         setSuccessMessage(`✅ Payment done with ${payment_mode.toUpperCase()} and package saved.`);
