@@ -24,7 +24,7 @@ const AddPackage = () => {
     setMessage('');
 
     try {
-      const res = await fetch('http://localhost:5000/api/add/package', {
+      const res = await fetch('http://3.226.219.194:5000/api/add/package', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -55,12 +55,13 @@ const AddPackage = () => {
       <div style={styles.card}>
         <h2 style={styles.heading}>➕ Add Insurance Package</h2>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} style={styles.form}>
           {['id', 'name', 'description', 'price'].map((field) => (
             <div style={styles.formGroup} key={field}>
-              <label style={styles.label}>{field.toUpperCase()}</label>
+              <label style={styles.label} htmlFor={field}>{field.toUpperCase()}</label>
               <input
                 type={field === 'price' ? 'number' : 'text'}
+                id={field}
                 name={field}
                 value={formData[field]}
                 onChange={handleInputChange}
@@ -71,9 +72,10 @@ const AddPackage = () => {
           ))}
 
           <div style={styles.formGroup}>
-            <label style={styles.label}>PACKAGE TYPE</label>
+            <label style={styles.label} htmlFor="package_type">PACKAGE TYPE</label>
             <select
               name="package_type"
+              id="package_type"
               value={formData.package_type}
               onChange={handleInputChange}
               required
@@ -88,8 +90,6 @@ const AddPackage = () => {
           <button
             type="submit"
             style={styles.submitButton}
-            onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#218838')}
-            onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#28a745')}
           >
             Add Package
           </button>
@@ -102,6 +102,7 @@ const AddPackage = () => {
               color: message.includes('successfully') ? 'green' : 'red',
               textAlign: 'center',
               fontWeight: 'bold',
+              fontSize: 'clamp(0.95rem, 2.5vw, 1.05rem)',
             }}
           >
             {message}
@@ -119,21 +120,25 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: '30px',
+    padding: 'clamp(20px, 5vw, 40px)',
   },
   card: {
     maxWidth: '500px',
     width: '100%',
     background: '#ffffff',
     borderRadius: '16px',
-    padding: '40px 30px',
-    boxShadow: '0 12px 24px rgba(0, 0, 0, 0.15)',
+    padding: 'clamp(24px, 5vw, 40px) clamp(20px, 5vw, 30px)',
+    boxShadow: '0 12px 24px rgba(0, 0, 0, 0.1)',
   },
   heading: {
     textAlign: 'center',
     marginBottom: '30px',
-    fontSize: '24px',
+    fontSize: 'clamp(1.6rem, 3vw, 2rem)',
     color: '#007bff',
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
   },
   formGroup: {
     marginBottom: '20px',
@@ -142,28 +147,28 @@ const styles = {
     display: 'block',
     marginBottom: '6px',
     fontWeight: 'bold',
-    fontSize: '14px',
+    fontSize: 'clamp(0.9rem, 2vw, 1rem)',
     color: '#333',
   },
   input: {
     width: '100%',
     padding: '12px',
-    fontSize: '15px',
+    fontSize: 'clamp(0.9rem, 2vw, 1rem)',
     borderRadius: '8px',
     border: '1px solid #ccc',
     outline: 'none',
-    transition: 'border-color 0.3s',
+    transition: 'border-color 0.3s ease',
   },
   submitButton: {
     width: '100%',
     padding: '14px',
-    fontSize: '16px',
+    fontSize: '1rem',
     backgroundColor: '#28a745',
     color: '#fff',
     border: 'none',
     borderRadius: '10px',
     cursor: 'pointer',
-    transition: '0.3s ease',
+    transition: 'background-color 0.3s ease',
   },
 };
 

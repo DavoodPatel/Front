@@ -1,4 +1,3 @@
-// src/pages/DoctorLogin.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,7 +11,7 @@ const DoctorLogin = () => {
     e.preventDefault();
     setLoading(true);
 
-    const url = 'http://localhost:5000/api/doctor/login';
+    const url = 'http://3.226.219.194:5000/api/doctor/login';
 
     try {
       const response = await fetch(url, {
@@ -26,19 +25,19 @@ const DoctorLogin = () => {
 
       if (data.success) {
         localStorage.setItem('doctor', JSON.stringify(data.doctor));
-        alert('Doctor login successful');
-        navigate('/doctor-dashboard'); // Add this route in App.js if not yet added
+        alert('✅ Doctor login successful');
+        navigate('/doctor-dashboard');
       } else {
-        alert('Login failed: ' + data.message);
+        alert('❌ Login failed: ' + data.message);
       }
     } catch (error) {
       setLoading(false);
-      alert('Server error. Please try again later.');
+      alert('❌ Server error. Please try again later.');
     }
   };
 
   return (
-    <div style={styles.container}>
+    <div style={styles.wrapper}>
       <div style={styles.card}>
         <h2 style={styles.title}>🩺 Doctor Login</h2>
         <form onSubmit={handleSubmit} style={styles.form}>
@@ -46,7 +45,7 @@ const DoctorLogin = () => {
             type="email"
             placeholder="Email"
             value={email}
-            onChange={e => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
             required
             style={styles.input}
           />
@@ -54,11 +53,15 @@ const DoctorLogin = () => {
             type="password"
             placeholder="Password"
             value={password}
-            onChange={e => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             required
             style={styles.input}
           />
-          <button type="submit" style={styles.button} disabled={loading}>
+          <button
+            type="submit"
+            style={{ ...styles.button, opacity: loading ? 0.7 : 1 }}
+            disabled={loading}
+          >
             {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
@@ -68,46 +71,50 @@ const DoctorLogin = () => {
 };
 
 const styles = {
-  container: {
-    backgroundColor: '#f4f6f8',
-    minHeight: '100vh',
+  wrapper: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    minHeight: '100vh',
+    padding: '20px',
+    background: 'linear-gradient(to right, #e0f7fa, #fce4ec)',
   },
   card: {
     backgroundColor: '#fff',
     padding: '40px 30px',
-    borderRadius: 12,
-    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+    borderRadius: '16px',
+    boxShadow: '0 10px 20px rgba(0,0,0,0.1)',
     width: '100%',
-    maxWidth: 400,
+    maxWidth: '400px',
   },
   title: {
-    marginBottom: 30,
     textAlign: 'center',
+    marginBottom: '30px',
+    fontSize: '24px',
     color: '#007bff',
   },
   form: {
     display: 'flex',
     flexDirection: 'column',
+    gap: '15px',
   },
   input: {
-    padding: '12px 16px',
-    marginBottom: 15,
+    padding: '14px',
+    fontSize: '16px',
+    borderRadius: '10px',
     border: '1px solid #ccc',
-    borderRadius: 6,
-    fontSize: 16,
+    outline: 'none',
+    transition: 'border-color 0.3s',
   },
   button: {
-    padding: '12px 16px',
+    padding: '14px',
     backgroundColor: '#007bff',
     color: '#fff',
-    fontSize: 16,
+    fontSize: '16px',
     border: 'none',
-    borderRadius: 6,
+    borderRadius: '10px',
     cursor: 'pointer',
-    transition: 'background 0.3s ease',
+    transition: 'background 0.3s',
   },
 };
 

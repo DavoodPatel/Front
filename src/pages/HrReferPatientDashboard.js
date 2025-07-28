@@ -14,21 +14,23 @@ const HrReferPatientDashboard = () => {
     father_name: '',
     mother_name: '',
     address: '',
-    no_of_children: 0,
-    children_names: [],
+    no_of_others: 0,
+    others_names: [],
     referred_by: '',
   });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    if (name === 'no_of_children') {
+    if (name === 'no_of_others') {
       const count = parseInt(value, 10);
-      setFormData((prev) => ({
-        ...prev,
-        no_of_children: count,
-        children_names: Array(count).fill(''),
-      }));
+      if (!isNaN(count) && count >= 0) {
+        setFormData((prev) => ({
+          ...prev,
+          no_of_others: count,
+          others_names: Array(count).fill(''),
+        }));
+      }
     } else {
       setFormData((prev) => ({
         ...prev,
@@ -37,26 +39,20 @@ const HrReferPatientDashboard = () => {
     }
   };
 
-  const handleChildNameChange = (index, value) => {
-    const updatedNames = [...formData.children_names];
+  const handleOtherNameChange = (index, value) => {
+    const updatedNames = [...formData.others_names];
     updatedNames[index] = value;
     setFormData((prev) => ({
       ...prev,
-      children_names: updatedNames,
+      others_names: updatedNames,
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const payload = {
-      ...formData,
-      selectedPackage,
-    };
-
+    const payload = { ...formData, selectedPackage };
     try {
-      const res = await axios.post('http://localhost:5000/api/hr/refer-patient-dashboard', payload);
-
+      const res = await axios.post('http://3.226.219.194:5000/api/hr/refer-patient-dashboard', payload);
       if (res.status === 200 || res.status === 201) {
         alert('✅ Patient registered successfully!');
         navigate('/packages', {
@@ -67,7 +63,7 @@ const HrReferPatientDashboard = () => {
           },
         });
       } else {
-        alert('Something went wrong. Please try again.');
+        alert('❌ Something went wrong. Please try again.');
       }
     } catch (err) {
       console.error('❌ Error submitting form:', err.response?.data || err.message);
@@ -86,7 +82,7 @@ const HrReferPatientDashboard = () => {
         <input type="text" name="name" value={formData.name} onChange={handleInputChange} required />
 
         <label>Mobile Number</label>
-        <input type="text" name="mobile_no" value={formData.mobile_no} onChange={handleInputChange} required />
+        <input type="tel" name="mobile_no" value={formData.mobile_no} onChange={handleInputChange} required />
 
         <label>Address</label>
         <textarea name="address" value={formData.address} onChange={handleInputChange} required />
@@ -102,24 +98,22 @@ const HrReferPatientDashboard = () => {
             <label>Mother's Name</label>
             <input type="text" name="mother_name" value={formData.mother_name} onChange={handleInputChange} />
 
-            <label>No. of Children</label>
+            <label>No. of Others</label>
             <input
               type="number"
-              name="no_of_children"
+              name="no_of_others"
               min="0"
-              value={formData.no_of_children}
+              value={formData.no_of_others}
               onChange={handleInputChange}
-          
             />
 
-            {formData.children_names.map((name, index) => (
+            {formData.others_names.map((name, index) => (
               <div key={index}>
-                <label>Child {index + 1} Name</label>
+                <label>Other {index + 1} Name</label>
                 <input
                   type="text"
                   value={name}
-                  onChange={(e) => handleChildNameChange(index, e.target.value)}
-                  
+                  onChange={(e) => handleOtherNameChange(index, e.target.value)}
                 />
               </div>
             ))}
@@ -134,30 +128,34 @@ const HrReferPatientDashboard = () => {
 
 const styles = {
   container: {
-    padding: '30px',
+    padding: 'clamp(20px, 5vw, 40px)',
     maxWidth: '600px',
-    margin: 'auto',
-    fontFamily: 'Arial',
+    margin: '0 auto',
+    fontFamily: 'Arial, sans-serif',
+    backgroundColor: '#f9f9f9',
+    borderRadius: '10px',
+    boxShadow: '0 0 10px rgba(0,0,0,0.08)',
   },
   heading: {
     textAlign: 'center',
-    marginBottom: '30px',
+    marginBottom: '24px',
+    fontSize: 'clamp(1.5rem, 2.5vw, 2rem)',
     color: '#007bff',
   },
   form: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '15px',
+    gap: '16px',
   },
   submitBtn: {
-    marginTop: '20px',
-    padding: '10px',
+    padding: '12px',
     backgroundColor: '#28a745',
     color: '#fff',
-    fontSize: '16px',
+    fontSize: '1rem',
     border: 'none',
-    borderRadius: '6px',
+    borderRadius: '8px',
     cursor: 'pointer',
+    transition: 'all 0.3s ease',
   },
 };
 

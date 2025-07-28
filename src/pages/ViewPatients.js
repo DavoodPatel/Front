@@ -11,19 +11,19 @@ const ViewPatients = () => {
 
   const fetchPatients = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/patients');
+      const res = await axios.get('http://3.226.219.194:5000/api/patients');
       setPatients(res.data);
     } catch (error) {
       setMessage('❌ Failed to fetch patients');
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (mobile_no) => {
     const confirmDelete = window.confirm('Are you sure you want to delete this patient?');
     if (!confirmDelete) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/patients/${id}`);
+      await axios.delete(`http://3.226.219.194:5000/api/patients/${mobile_no}`);
       setMessage('✅ Patient deleted successfully');
       fetchPatients();
     } catch (error) {
@@ -37,17 +37,17 @@ const ViewPatients = () => {
       {message && <p style={styles.message}>{message}</p>}
 
       {patients.length === 0 ? (
-        <p style={{ textAlign: 'center', color: '#777' }}>No patients found.</p>
+        <p style={styles.noData}>No patients found.</p>
       ) : (
         <div style={styles.list}>
           {patients.map((patient) => (
-            <div key={patient.id} style={styles.card}>
-              <div>
+            <div key={patient.mobile_no} style={styles.card}>
+              <div style={styles.left}>
                 <h3 style={styles.name}>{patient.name}</h3>
-                <p style={styles.email}>{patient.email}</p>
+                <p style={styles.email}>PH-NO: {patient.mobile_no}</p>
               </div>
               <button
-                onClick={() => handleDelete(patient.id)}
+                onClick={() => handleDelete(patient.mobile_no)}
                 style={styles.deleteButton}
               >
                 🗑️ Delete
@@ -62,10 +62,10 @@ const ViewPatients = () => {
 
 const styles = {
   container: {
-    maxWidth: '800px',
+    maxWidth: '950px',
     margin: '40px auto',
     padding: '20px',
-    fontFamily: 'Arial, sans-serif',
+    fontFamily: 'Segoe UI, sans-serif',
   },
   heading: {
     textAlign: 'center',
@@ -75,9 +75,13 @@ const styles = {
   },
   message: {
     textAlign: 'center',
-    color: '#333',
+    color: '#28a745',
     fontWeight: 'bold',
     marginBottom: '20px',
+  },
+  noData: {
+    textAlign: 'center',
+    color: '#888',
   },
   list: {
     display: 'flex',
@@ -86,12 +90,18 @@ const styles = {
   },
   card: {
     display: 'flex',
+    flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: '#f9f9f9',
-    padding: '15px 20px',
-    borderRadius: '10px',
+    alignItems: 'flex-start',
+    flexWrap: 'wrap',
+    backgroundColor: '#ffffff',
+    padding: '20px',
+    borderRadius: '12px',
     boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
+  },
+  left: {
+    flex: 1,
+    minWidth: '200px',
   },
   name: {
     margin: 0,
@@ -99,18 +109,20 @@ const styles = {
     color: '#333',
   },
   email: {
-    margin: '5px 0 0',
+    margin: '8px 0 0',
     fontSize: '14px',
-    color: '#555',
+    color: '#666',
   },
   deleteButton: {
     backgroundColor: '#dc3545',
     color: '#fff',
     border: 'none',
     borderRadius: '6px',
-    padding: '8px 14px',
+    padding: '10px 16px',
     cursor: 'pointer',
     fontSize: '14px',
+    marginTop: '10px',
+    alignSelf: 'flex-end',
     transition: 'background-color 0.3s ease',
   },
 };

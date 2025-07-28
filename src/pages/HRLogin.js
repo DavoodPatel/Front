@@ -12,10 +12,8 @@ const HRLogin = () => {
     e.preventDefault();
     setLoading(true);
 
-    const url = 'http://localhost:5000/api/hr/login';
-
     try {
-      const response = await fetch(url, {
+      const response = await fetch('http://3.226.219.194:5000/api/hr/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -26,32 +24,16 @@ const HRLogin = () => {
 
       if (data.success) {
         localStorage.setItem('hr', JSON.stringify(data.hr));
-        alert('HR login successful');
-        navigate('/hr-dashboard'); // Add route if needed
+        alert('✅ HR login successful!');
+        navigate('/hr-dashboard');
       } else {
-        alert('Login failed: ' + data.message);
+        alert('❌ Login failed: ' + data.message);
       }
     } catch (error) {
       setLoading(false);
-      alert('Server error. Please try again later.');
+      alert('❌ Server error. Please try again later.');
     }
   };
-  const handleLogin = async () => {
-  const response = await fetch('/api/hr/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password })
-  });
-
-  const data = await response.json();
-  if (data.success) {
-    localStorage.setItem('hr', JSON.stringify(data.hr));
-    navigate('/hrdashboard'); // ✅ Redirect to HR Dashboard
-  } else {
-    alert(data.message);
-  }
-};
-
 
   return (
     <div style={styles.container}>
@@ -90,6 +72,7 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    padding: '20px',
   },
   card: {
     backgroundColor: '#fff',
@@ -103,6 +86,7 @@ const styles = {
     marginBottom: 30,
     textAlign: 'center',
     color: '#007bff',
+    fontSize: '24px',
   },
   form: {
     display: 'flex',

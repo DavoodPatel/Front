@@ -11,7 +11,7 @@ const ViewPackages = () => {
 
   const fetchPackages = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/packages');
+      const res = await axios.get('http://3.226.219.194:5000/api/packages');
       setPackages(res.data);
     } catch (error) {
       setMessage('❌ Failed to fetch packages');
@@ -23,7 +23,7 @@ const ViewPackages = () => {
     if (!confirmDelete) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/packages/${id}`);
+      await axios.delete(`http://3.226.219.194:5000/api/packages/${id}`);
       setMessage('✅ Package deleted successfully');
       fetchPackages();
     } catch (error) {
@@ -37,12 +37,12 @@ const ViewPackages = () => {
       {message && <p style={styles.message}>{message}</p>}
 
       {packages.length === 0 ? (
-        <p style={{ textAlign: 'center', color: '#777' }}>No packages available.</p>
+        <p style={styles.noData}>No packages available.</p>
       ) : (
         <div style={styles.list}>
           {packages.map((pkg) => (
             <div key={pkg.id} style={styles.card}>
-              <div>
+              <div style={styles.leftSection}>
                 <h3 style={styles.name}>{pkg.name}</h3>
                 <p style={styles.desc}>{pkg.description}</p>
               </div>
@@ -65,10 +65,10 @@ const ViewPackages = () => {
 
 const styles = {
   container: {
-    maxWidth: '850px',
+    maxWidth: '950px',
     margin: '40px auto',
     padding: '20px',
-    fontFamily: 'Arial, sans-serif',
+    fontFamily: 'Segoe UI, sans-serif',
   },
   heading: {
     textAlign: 'center',
@@ -80,7 +80,11 @@ const styles = {
     textAlign: 'center',
     fontWeight: 'bold',
     marginBottom: '20px',
-    color: '#333',
+    color: '#28a745',
+  },
+  noData: {
+    textAlign: 'center',
+    color: '#888',
   },
   list: {
     display: 'flex',
@@ -89,16 +93,22 @@ const styles = {
   },
   card: {
     display: 'flex',
+    flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    gap: '20px',
     padding: '20px',
-    backgroundColor: '#f9f9f9',
-    borderRadius: '10px',
-    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
+    backgroundColor: '#ffffff',
+    borderRadius: '12px',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+    flexWrap: 'wrap',
+  },
+  leftSection: {
+    flex: 2,
+    minWidth: '200px',
   },
   name: {
-    margin: '0 0 5px 0',
-    fontSize: '18px',
+    margin: '0 0 6px 0',
+    fontSize: '20px',
     color: '#333',
   },
   desc: {
@@ -110,7 +120,8 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-end',
-    gap: '10px',
+    justifyContent: 'space-between',
+    minWidth: '130px',
   },
   price: {
     backgroundColor: '#28a745',
@@ -119,6 +130,8 @@ const styles = {
     borderRadius: '8px',
     fontSize: '14px',
     fontWeight: 'bold',
+    marginBottom: '10px',
+    whiteSpace: 'nowrap',
   },
   deleteButton: {
     backgroundColor: '#dc3545',
